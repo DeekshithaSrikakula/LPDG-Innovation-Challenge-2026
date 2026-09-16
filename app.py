@@ -609,31 +609,23 @@ with tab_schedule:
                     )
 
             table_rows.append(
-                f"""
-                <tr>
-                    <td style="width: 70px; text-align: center;">{rank_badge}</td>
-                    <td style="width: 170px;"><span class="gw-mono">{gw_id}</span></td>
-                    <td style="width: 150px;"><span class="score-pill">{score:.1f} hrs</span></td>
-                    <td class="reason-text">{highlighted_reason}</td>
-                </tr>
-                """
+                f'<tr><td style="width: 70px; text-align: center;">{rank_badge}</td>'
+                f'<td style="width: 170px;"><span class="gw-mono">{gw_id}</span></td>'
+                f'<td style="width: 150px;"><span class="score-pill">{score:.1f} hrs</span></td>'
+                f'<td class="reason-text">{highlighted_reason}</td></tr>'
             )
 
-        html_table = f"""
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th style="width: 70px; text-align: center;">Rank</th>
-                    <th style="width: 170px;">Gateway ID</th>
-                    <th style="width: 150px;">Anomaly Score</th>
-                    <th>Diagnostic Audit Reason</th>
-                </tr>
-            </thead>
-            <tbody>
-                {''.join(table_rows)}
-            </tbody>
-        </table>
-        """
+        html_table = (
+            '<table class="styled-table">'
+            '<thead><tr>'
+            '<th style="width: 70px; text-align: center;">Rank</th>'
+            '<th style="width: 170px;">Gateway ID</th>'
+            '<th style="width: 150px;">Anomaly Score</th>'
+            '<th>Diagnostic Audit Reason</th>'
+            '</tr></thead>'
+            f'<tbody>{"".join(table_rows)}</tbody>'
+            '</table>'
+        )
         st.markdown(html_table, unsafe_allow_html=True)
 
         st.write("")
