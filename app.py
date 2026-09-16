@@ -379,7 +379,7 @@ if load_btn:
         if code == 200:
             st.session_state.rankings_data = resp.get("gateways", [])
             st.session_state.last_loaded_week = selected_week
-            st.toast(f"Loaded rankings for {selected_week}", icon="✓")
+            st.toast(f"Loaded rankings for {selected_week}")
         elif code == 0:
             st.error(resp.get("detail"))
         else:
