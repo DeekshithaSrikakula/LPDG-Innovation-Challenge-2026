@@ -2,7 +2,7 @@
 
 Production-ready service for identifying and ranking smart meter gateways requiring operational field visits.
 
-> 🎥 **Demonstration Screen Recording:** [Click here to watch the 6–8 minute walkthrough](PASTE_YOUR_VIDEO_URL_HERE)
+> 🎥 **Demonstration Screen Recording:** [Click here to watch the 6–8 minute walkthrough](https://drive.google.com/file/d/1ULQ1VtybiqGk240grDYlGRacfi1vHlDL/view?usp=drive_link)
 
 ---
 
@@ -422,4 +422,4 @@ The 6–8 minute demonstration walkthrough video covers:
 3. **Streamlit Operations Console:** Walkthrough of the `2026-02-23` scored week, 4 KPI cards, 15-gateway priority table, and individual gateway diagnostic audit.
 4. **Verification & Tests:** Running `pytest -q` (all 20 tests passing) and `validate_submission.py predictions.csv` (OK).
 
-- **Screen Recording URL:** [Watch Walkthrough Video](PASTE_YOUR_VIDEO_URL_HERE)
+- **Screen Recording URL:** [Watch Walkthrough Video](https://drive.google.com/file/d/1ULQ1VtybiqGk240grDYlGRacfi1vHlDL/view?usp=drive_link)
