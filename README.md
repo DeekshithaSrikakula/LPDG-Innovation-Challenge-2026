@@ -104,7 +104,7 @@ LPDG-Innovation-Challenge-2026/
 ├── baseline_3sigma.py             # Official 3-sigma anomaly baseline logic
 ├── validate_submission.py         # Official validator checking predictions schema
 ├── predictions.csv                # Validated 120-row submission predictions
-├── resume.pdf                     # Candidate CV (<Registration_Id>.pdf)
+├── 23091A32J0.pdf                # Candidate CV (<Registration_Id>.pdf)
 ├── DECISIONS.md                   # Architectural & engineering decisions log
 ├── AI-USAGE.md                    # Transparent record of AI tool assistance
 ├── README.md                      # Complete system documentation

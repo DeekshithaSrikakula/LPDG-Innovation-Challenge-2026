@@ -31,7 +31,7 @@ This document provides a transparent, honest record of AI assistance utilized du
 2. **Submission Predictions Validation:** Manually executed `validate_submission.py predictions.csv` and confirmed 120 valid rows across all 8 scored weeks.
 3. **Git Cleanliness & Data Privacy:** Verified that proprietary challenge data (`data/`) and virtual environments (`.venv/`) were strictly excluded from Git tracking via `.gitignore` and `git ls-files`.
 4. **Test Suite Execution:** Ran `pytest -q` directly in the local `.venv` environment and verified all 20 tests pass.
-5. **Candidate Resume Integrity:** Located the candidate resume (`resume (3).pdf`) and placed it as `resume.pdf` in the repository root for manual renaming to `<Registration_Id>.pdf`.
+5. **Candidate Resume Integrity:** Located the candidate resume (`resume (3).pdf`) and placed it as `23091A32J0.pdf` in the repository root adhering to the `<Registration_Id>.pdf` submission convention.
 
 ---
 
