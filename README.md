@@ -2,6 +2,8 @@
 
 Production-ready service for identifying and ranking smart meter gateways requiring operational field visits.
 
+> 🎥 **Demonstration Screen Recording:** [Click here to watch the 6–8 minute walkthrough](PASTE_YOUR_VIDEO_URL_HERE)
+
 ---
 
 ## 1. Project Overview
@@ -409,3 +411,15 @@ For a 6 to 8 minute demonstration video:
    - Run **Explain Gateway** for a top-ranked gateway and for a gateway outside the top 15.
    - Highlight the architecture flow: `User → Streamlit Dashboard → FastAPI → RankingEngine → Telemetry Data`.
 4. **Test Suite & Validator (1.5 min):** Run `pytest -q` showing all 20 tests passing and run `python validate_submission.py predictions.csv`.
+
+---
+
+## 18. Demonstration Screen Recording
+
+The 6–8 minute demonstration walkthrough video covers:
+1. **Architecture Tour:** Clean separation between telemetry ingestion, `RankingEngine`, FastAPI service layer, and Streamlit operations dashboard.
+2. **FastAPI & Swagger Walkthrough:** Live inspection of `/health`, `/weeks/{week_start}/rankings`, `/gateways/{gateway_id}/explanation`, and `/run`.
+3. **Streamlit Operations Console:** Walkthrough of the `2026-02-23` scored week, 4 KPI cards, 15-gateway priority table, and individual gateway diagnostic audit.
+4. **Verification & Tests:** Running `pytest -q` (all 20 tests passing) and `validate_submission.py predictions.csv` (OK).
+
+- **Screen Recording URL:** [Watch Walkthrough Video](PASTE_YOUR_VIDEO_URL_HERE)
