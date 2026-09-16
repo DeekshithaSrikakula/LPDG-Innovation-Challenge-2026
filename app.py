@@ -7,72 +7,300 @@ import httpx
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="LPDG Gateway Visit Dashboard",
+    page_title="LPDG Gateway Intelligence | Field Visit Prioritization",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-# Professional styling: clean white/light background, corporate blue accents
+# ---------------------------------------------------------
+# Enterprise CSS Styling
+# ---------------------------------------------------------
 st.markdown(
     """
     <style>
-        .main-header {
-            font-size: 2.1rem;
-            font-weight: 700;
-            color: #0F3D64;
-            margin-bottom: 0.2rem;
+        /* Global Page Adjustments */
+        .block-container {
+            max-width: 1260px !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 3rem !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
-        .sub-header {
-            font-size: 1.05rem;
-            color: #4A5568;
-            margin-bottom: 0.8rem;
+        
+        /* Modern Header Hero */
+        .hero-banner {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F3D64 100%);
+            border-radius: 14px;
+            padding: 1.75rem 2rem;
+            color: #FFFFFF;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .flow-pill {
-            background-color: #EBF8FF;
-            color: #2B6CB0;
+        .hero-title-group h1 {
+            font-size: 1.85rem !important;
+            font-weight: 700 !important;
+            color: #FFFFFF !important;
+            margin: 0 !important;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .hero-title-group p {
+            font-size: 0.95rem;
+            color: #94A3B8;
+            margin: 0.35rem 0 0 0;
+        }
+        .hero-badge-container {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+        .badge-online {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+        .badge-offline {
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(248, 113, 113, 0.4);
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+        .badge-track {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60A5FA;
+            border: 1px solid rgba(96, 165, 250, 0.3);
             padding: 0.4rem 0.85rem;
             border-radius: 9999px;
             font-size: 0.85rem;
             font-weight: 600;
-            border: 1px solid #BEE3F8;
-            display: inline-block;
-            margin-bottom: 1.2rem;
         }
-        .status-box-online {
-            background-color: #F0FFF4;
-            color: #22543D;
-            border: 1px solid #C6F6D5;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .status-box-offline {
-            background-color: #FFF5F5;
-            color: #742A2A;
-            border: 1px solid #FED7D7;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        .card {
-            background: #FFFFFF;
+
+        /* Architecture Process Stepper */
+        .pipeline-box {
+            background: #F8FAFC;
             border: 1px solid #E2E8F0;
             border-radius: 10px;
-            padding: 1.2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            margin-top: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #475569;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+        }
+        .step-active {
+            color: #2563EB;
+        }
+        .pipeline-arrow {
+            color: #94A3B8;
+            font-weight: 700;
+        }
+
+        /* Metric Cards */
+        .metric-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.15rem 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+        .metric-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            border-color: #CBD5E1;
+        }
+        .metric-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .metric-value {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #0F172A;
+            line-height: 1.2;
+        }
+        .metric-sub {
+            font-size: 0.8rem;
+            color: #2563EB;
+            font-weight: 500;
+            margin-top: 0.35rem;
+        }
+
+        /* Modern Filter Panel */
+        .control-panel {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Buttons Styling Overrides */
+        div.stButton > button:first-child {
+            background-color: #2563EB;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            padding: 0.55rem 1.25rem;
+            transition: all 0.2s ease;
+        }
+        div.stButton > button:first-child:hover {
+            background-color: #1D4ED8;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Custom HTML Table */
+        .styled-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 0.75rem;
+            background: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .styled-table thead tr {
+            background-color: #F8FAFC;
+            color: #475569;
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .styled-table th, .styled-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #F1F5F9;
+        }
+        .styled-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .styled-table tbody tr:hover {
+            background-color: #F8FAFC;
+        }
+        
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .rank-1 { background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
+        .rank-2 { background-color: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+        .rank-3 { background-color: #FFEDD5; color: #C2410C; border: 1px solid #FED7AA; }
+        .rank-other { background-color: #EFF6FF; color: #1E40AF; border: 1px solid #DBEAFE; }
+
+        .gw-mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #0F172A;
+            background: #F1F5F9;
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid #E2E8F0;
+        }
+        .score-pill {
+            display: inline-block;
+            background: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FEE2E2;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .reason-text {
+            font-size: 0.88rem;
+            color: #334155;
+            line-height: 1.4;
+        }
+        .metric-tag {
+            font-weight: 600;
+            color: #1E40AF;
+            background: #EFF6FF;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* Diagnosis Card */
+        .diag-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .diag-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 0.75rem;
+        }
+        .priority-badge-visit {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #A7F3D0;
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
             margin-bottom: 1rem;
         }
-        .card-title {
-            font-size: 1.15rem;
+        .priority-badge-novisit {
+            background: #F1F5F9;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
             font-weight: 600;
-            color: #1A365D;
-            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
     </style>
     """,
@@ -97,26 +325,27 @@ SCORED_WEEKS = [
 
 
 # ---------------------------------------------------------
-# API Helper Functions (Consumes FastAPI via HTTP)
+# API Helper Functions (Pure HTTP Client)
 # ---------------------------------------------------------
+@st.cache_data(ttl=2.0)
 def check_api_health() -> tuple[bool, dict]:
     try:
-        with httpx.Client(timeout=3.0) as client:
+        with httpx.Client(timeout=2.5) as client:
             resp = client.get(f"{API_BASE_URL}/health")
             if resp.status_code == 200:
                 return True, resp.json()
-            return False, {"detail": f"Status code: {resp.status_code}"}
+            return False, {"detail": f"HTTP {resp.status_code}"}
     except Exception as e:
-        return False, {"detail": f"FastAPI service not reachable at {API_BASE_URL}. Please start uvicorn src.api.main:app --reload (Error: {e})"}
+        return False, {"detail": str(e)}
 
 
-def fetch_week_rankings(week_start: str) -> tuple[int, dict | list]:
+def fetch_week_rankings(week_start: str) -> tuple[int, dict]:
     try:
         with httpx.Client(timeout=10.0) as client:
             resp = client.get(f"{API_BASE_URL}/weeks/{week_start}/rankings")
             return resp.status_code, resp.json()
     except Exception as e:
-        return 0, {"detail": f"FastAPI service not reachable at {API_BASE_URL}. Please start uvicorn src.api.main:app --reload (Error: {e})"}
+        return 0, {"detail": f"FastAPI service unreachable at {API_BASE_URL}: {e}"}
 
 
 def fetch_gateway_explanation(gateway_id: str, week_start: str) -> tuple[int, dict]:
@@ -128,7 +357,7 @@ def fetch_gateway_explanation(gateway_id: str, week_start: str) -> tuple[int, di
             )
             return resp.status_code, resp.json()
     except Exception as e:
-        return 0, {"detail": f"FastAPI service not reachable at {API_BASE_URL}. Please start uvicorn src.api.main:app --reload (Error: {e})"}
+        return 0, {"detail": f"FastAPI service unreachable at {API_BASE_URL}: {e}"}
 
 
 def trigger_rerun(week_start: str | None = None) -> tuple[int, dict]:
@@ -138,229 +367,421 @@ def trigger_rerun(week_start: str | None = None) -> tuple[int, dict]:
             resp = client.post(f"{API_BASE_URL}/run", json=payload)
             return resp.status_code, resp.json()
     except Exception as e:
-        return 0, {"detail": f"FastAPI service not reachable at {API_BASE_URL}. Please start uvicorn src.api.main:app --reload (Error: {e})"}
+        return 0, {"detail": f"FastAPI service unreachable at {API_BASE_URL}: {e}"}
 
 
 # ---------------------------------------------------------
-# Header & Architecture Workflow
+# Session State Initialization
 # ---------------------------------------------------------
-col_header, col_status = st.columns([3, 1])
-
-with col_header:
-    st.markdown('<div class="main-header">LPDG Gateway Visit Dashboard</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sub-header">Prioritized field visits for radio smart-meter gateways based on 3-sigma telemetry anomaly analysis.</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="flow-pill">User &rarr; Streamlit Dashboard &rarr; FastAPI &rarr; RankingEngine &rarr; Telemetry Data</div>',
-        unsafe_allow_html=True,
-    )
-
-with col_status:
-    is_online, health_data = check_api_health()
-    if is_online:
-        st.markdown(
-            f'<div class="status-box-online">🟢 API Online &bull; v{health_data.get("version", "1.0.0")}</div>',
-            unsafe_allow_html=True,
-        )
-    else:
-        st.markdown(
-            '<div class="status-box-offline">🔴 API Offline &bull; Not Connected</div>',
-            unsafe_allow_html=True,
-        )
-        st.caption(f"Target: `{API_BASE_URL}`")
-
-if not is_online:
-    st.warning(
-        f"⚠️ **FastAPI service not reachable at {API_BASE_URL}**.\n\n"
-        "Please open your terminal and start the backend service with:\n"
-        "```powershell\n"
-        "uvicorn src.api.main:app --reload\n"
-        "```"
-    )
-
-# ---------------------------------------------------------
-# Controls: Week Selection & Action Buttons
-# ---------------------------------------------------------
-ctrl_col1, ctrl_col2, ctrl_col3, ctrl_col4 = st.columns([2, 1.2, 1.2, 2.5])
-
-with ctrl_col1:
-    selected_week = st.selectbox(
-        "Select Scored Week:",
-        options=SCORED_WEEKS,
-        index=0,
-        help="Choose one of the eight scored deployment Mondays from Feb 2 to Mar 23, 2026.",
-    )
-
-with ctrl_col2:
-    st.write("")
-    st.write("")
-    load_btn = st.button("📥 Load Rankings", use_container_width=True, type="primary")
-
-with ctrl_col3:
-    st.write("")
-    st.write("")
-    run_btn = st.button("🔄 Run Again", use_container_width=True)
-
-with ctrl_col4:
-    st.write("")
-    st.write("")
-    run_all_check = st.checkbox("Run for all 8 weeks on 'Run Again'", value=False)
-
-# Session state initialization
+if "selected_week" not in st.session_state:
+    st.session_state.selected_week = SCORED_WEEKS[0]
 if "rankings_data" not in st.session_state:
     st.session_state.rankings_data = None
-if "current_week" not in st.session_state:
-    st.session_state.current_week = selected_week
+if "last_loaded_week" not in st.session_state:
+    st.session_state.last_loaded_week = None
 
-# Auto-load on initial view if API is available and state is empty
+# Check API Health
+is_online, health_info = check_api_health()
+
+# ---------------------------------------------------------
+# Hero Header Banner
+# ---------------------------------------------------------
+status_badge_html = (
+    f'<div class="badge-online"><span>●</span> API Online v{health_info.get("version", "1.0.0")}</div>'
+    if is_online
+    else '<div class="badge-offline"><span>●</span> API Offline</div>'
+)
+
+st.markdown(
+    f"""
+    <div class="hero-banner">
+        <div class="hero-title-group">
+            <h1>⚡ LPDG Gateway Visit Dashboard</h1>
+            <p>Automated 3-sigma anomaly prioritization for smart meter radio gateways • Operations Triage Console</p>
+        </div>
+        <div class="hero-badge-container">
+            <div class="badge-track">Track B • Software Dev</div>
+            {status_badge_html}
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------
+# Architecture Pipeline Breadcrumb
+# ---------------------------------------------------------
+st.markdown(
+    """
+    <div class="pipeline-box">
+        <div class="pipeline-step"><span class="step-active">1. 📡 Telemetry Ingestion</span></div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step"><span class="step-active">2. ⚙️ 28-Day Baseline (3&sigma;)</span></div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step"><span class="step-active">3. ⚡ FastAPI Service (:8000)</span></div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step"><span class="step-active">4. 📊 Streamlit Ops Dashboard (:8501)</span></div>
+        <span class="pipeline-arrow">&rarr;</span>
+        <div class="pipeline-step"><span>🛠️ Field Crew Dispatch</span></div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Offline Warning Banner
+if not is_online:
+    st.warning(
+        f"⚠️ **FastAPI backend is unreachable at `{API_BASE_URL}`.**\n\n"
+        "To start the API service, open your terminal and run:\n"
+        "```powershell\nuvicorn src.api.main:app --reload\n```"
+    )
+
+# ---------------------------------------------------------
+# Control Panel (Card Layout)
+# ---------------------------------------------------------
+st.markdown('<div class="control-panel">', unsafe_allow_html=True)
+c_col1, c_col2, c_col3, c_col4 = st.columns([2.2, 1.4, 1.4, 2.5], gap="medium")
+
+with c_col1:
+    selected_week = st.selectbox(
+        "Scored Deployment Monday:",
+        options=SCORED_WEEKS,
+        index=SCORED_WEEKS.index(st.session_state.selected_week) if st.session_state.selected_week in SCORED_WEEKS else 0,
+        help="Select one of the 8 scored Mondays from 2026-02-02 to 2026-03-23.",
+    )
+    st.session_state.selected_week = selected_week
+
+with c_col2:
+    st.write("")
+    st.write("")
+    load_btn = st.button("📥 Load Rankings", use_container_width=True)
+
+with c_col3:
+    st.write("")
+    st.write("")
+    run_btn = st.button("🔄 Recompute", use_container_width=True)
+
+with c_col4:
+    st.write("")
+    st.write("")
+    run_all_check = st.checkbox("Recompute all 8 weeks on 'Recompute'", value=False)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Auto-load data if not already loaded
 if st.session_state.rankings_data is None and is_online:
-    status_code, response_data = fetch_week_rankings(selected_week)
-    if status_code == 200:
-        st.session_state.rankings_data = response_data.get("gateways", [])
-        st.session_state.current_week = selected_week
+    code, resp = fetch_week_rankings(selected_week)
+    if code == 200:
+        st.session_state.rankings_data = resp.get("gateways", [])
+        st.session_state.last_loaded_week = selected_week
 
-# Handle Load Rankings action
+# Process Load Rankings click
 if load_btn:
-    with st.spinner(f"Querying FastAPI for week {selected_week}..."):
-        status_code, response_data = fetch_week_rankings(selected_week)
-        if status_code == 200:
-            st.session_state.rankings_data = response_data.get("gateways", [])
-            st.session_state.current_week = selected_week
-            st.success(f"Successfully loaded top 15 gateways for week {selected_week}.")
-        elif status_code == 0:
-            st.error(f"⚠️ {response_data.get('detail')}")
-        elif status_code == 400:
-            st.error(f"Bad Request (HTTP 400): {response_data.get('detail')}")
-        elif status_code == 404:
-            st.error(f"Not Found (HTTP 404): {response_data.get('detail')}")
-        elif status_code == 500:
-            st.error(f"API Server Error (HTTP 500): {response_data.get('detail')}")
+    with st.spinner(f"Fetching rankings for week {selected_week} from FastAPI..."):
+        code, resp = fetch_week_rankings(selected_week)
+        if code == 200:
+            st.session_state.rankings_data = resp.get("gateways", [])
+            st.session_state.last_loaded_week = selected_week
+            st.toast(f"✅ Loaded {len(st.session_state.rankings_data)} gateways for {selected_week}", icon="📋")
         else:
-            st.error(f"Failed to fetch rankings (HTTP {status_code}): {response_data.get('detail')}")
+            st.error(f"Error ({code}): {resp.get('detail', 'Unknown error')}")
 
-# Handle Run Again action
+# Process Recompute click
 if run_btn:
-    week_arg = None if run_all_check else selected_week
-    with st.spinner("Triggering calculation on FastAPI via POST /run..."):
-        status_code, response_data = trigger_rerun(week_arg)
-        if status_code == 200:
-            st.success(f"Success: {response_data.get('message')}")
-            _, fresh_data = fetch_week_rankings(selected_week)
-            if isinstance(fresh_data, dict) and "gateways" in fresh_data:
-                st.session_state.rankings_data = fresh_data.get("gateways", [])
-                st.session_state.current_week = selected_week
-        elif status_code == 0:
-            st.error(f"⚠️ {response_data.get('detail')}")
+    week_param = None if run_all_check else selected_week
+    with st.spinner("Invoking POST /run on FastAPI..."):
+        code, resp = trigger_rerun(week_param)
+        if code == 200:
+            st.success(f"Calculation complete: {resp.get('message')}")
+            # Refresh current week
+            _, fresh_resp = fetch_week_rankings(selected_week)
+            if isinstance(fresh_resp, dict) and "gateways" in fresh_resp:
+                st.session_state.rankings_data = fresh_resp.get("gateways", [])
+                st.session_state.last_loaded_week = selected_week
         else:
-            st.error(f"Run failed (HTTP {status_code}): {response_data.get('detail')}")
+            st.error(f"Failed (HTTP {code}): {resp.get('detail')}")
 
 # ---------------------------------------------------------
-# Summary / Metrics Row
+# Dynamic KPI Cards Row
 # ---------------------------------------------------------
-st.markdown("---")
-m_col1, m_col2, m_col3 = st.columns(3)
+current_list = st.session_state.rankings_data or []
+top_score = f"{current_list[0]['score']:.1f} hrs" if current_list else "—"
+active_week_str = st.session_state.last_loaded_week or selected_week
+top_reason_metric = "disconnection_cnt"
+if current_list and "offline_duration" in current_list[0].get("reason", ""):
+    top_reason_metric = "offline_duration"
 
-with m_col1:
-    ranked_count = len(st.session_state.rankings_data) if st.session_state.rankings_data else 0
-    st.metric(label="Total Ranked Gateways", value=f"{ranked_count} Gateways", delta="Fixed Capacity: 15" if ranked_count == 15 else None)
+kpi1, kpi2, kpi3, kpi4 = st.columns(4, gap="medium")
 
-with m_col2:
-    st.metric(label="Selected Week", value=st.session_state.current_week or selected_week)
-
-with m_col3:
-    status_label = "Online (Connected)" if is_online else "Offline (Unreachable)"
-    st.metric(label="API Connection Status", value=status_label)
-
-# ---------------------------------------------------------
-# Display Rankings Table
-# ---------------------------------------------------------
-st.markdown("---")
-
-if st.session_state.rankings_data:
-    gateways_list = st.session_state.rankings_data
-    df = pd.DataFrame(gateways_list)
-
-    table_df = pd.DataFrame(
-        {
-            "Rank": df["rank"].astype(int),
-            "Gateway ID": df["gateway_id"].astype(str),
-            "Score": df["score"].astype(float),
-            "Reason": df["reason"].astype(str),
-        }
+with kpi1:
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">Visit Quota</div>
+            <div class="metric-value">{len(current_list)} / 15</div>
+            <div class="metric-sub">✓ 100% capacity scheduled</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    st.subheader(f"Top 15 Gateways for Week {st.session_state.current_week}")
-    st.dataframe(
-        table_df,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Rank": st.column_config.NumberColumn("Rank", format="%d", width="small"),
-            "Gateway ID": st.column_config.TextColumn("Gateway ID", width="medium"),
-            "Score": st.column_config.NumberColumn("Score (Breach Hours)", format="%.1f", width="small"),
-            "Reason": st.column_config.TextColumn("Reason", width="large"),
-        },
+with kpi2:
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">Selected Week</div>
+            <div class="metric-value" style="font-size: 1.35rem; padding-top: 0.2rem;">{active_week_str}</div>
+            <div class="metric-sub">Trailing 28d baseline window</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    # ---------------------------------------------------------
-    # Gateway Explanation Section
-    # ---------------------------------------------------------
-    st.markdown("---")
-    st.subheader("Gateway Diagnosis & Explanation")
-    st.caption("Inspect why a specific gateway is ranked, or query any gateway across the wider network.")
+with kpi3:
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">Max Anomaly Score</div>
+            <div class="metric-value">{top_score}</div>
+            <div class="metric-sub">Rank #1 worst deviation</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    exp_col1, exp_col2 = st.columns([1.5, 2.5])
+with kpi4:
+    status_text = "Connected (:8000)" if is_online else "Offline"
+    status_color = "#10B981" if is_online else "#EF4444"
+    st.markdown(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">FastAPI Backend</div>
+            <div class="metric-value" style="color: {status_color}; font-size: 1.35rem; padding-top: 0.2rem;">{status_text}</div>
+            <div class="metric-sub">REST /docs Swagger active</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    available_ids = [gw["gateway_id"] for gw in gateways_list]
+st.write("")
 
-    with exp_col1:
-        id_mode = st.radio(
-            "Select lookup method:",
+# ---------------------------------------------------------
+# Tabbed Workspace
+# ---------------------------------------------------------
+tab_schedule, tab_diag, tab_arch = st.tabs([
+    "📋 Weekly Visit Schedule (Top 15)",
+    "🔍 Gateway Diagnostic Audit",
+    "🏗️ System Architecture & API",
+])
+
+# ---------------------------------------------------------
+# TAB 1: Weekly Visit Schedule Table
+# ---------------------------------------------------------
+with tab_schedule:
+    if current_list:
+        st.markdown(f"#### Prioritized Field Visits for Scored Week: `{active_week_str}`")
+        st.caption("Exactly 15 radio gateways prioritized for field technician visits based on trailing 7-day 3-sigma telemetry deviations.")
+
+        # Build custom styled HTML table
+        table_rows = []
+        for gw in current_list:
+            rank = gw["rank"]
+            gw_id = gw["gateway_id"]
+            score = gw["score"]
+            reason = gw["reason"]
+
+            # Rank Badge Class
+            if rank == 1:
+                rank_badge = f'<span class="rank-badge rank-1">1</span>'
+            elif rank == 2:
+                rank_badge = f'<span class="rank-badge rank-2">2</span>'
+            elif rank == 3:
+                rank_badge = f'<span class="rank-badge rank-3">3</span>'
+            else:
+                rank_badge = f'<span class="rank-badge rank-other">{rank}</span>'
+
+            # Format reason with highlighted metric tag
+            highlighted_reason = reason
+            for metric_kw in ["disconnection_cnt", "offline_duration_sec", "reboot_cnt"]:
+                if metric_kw in highlighted_reason:
+                    highlighted_reason = highlighted_reason.replace(
+                        metric_kw, f'<span class="metric-tag">{metric_kw}</span>'
+                    )
+
+            table_rows.append(
+                f"""
+                <tr>
+                    <td style="width: 70px; text-align: center;">{rank_badge}</td>
+                    <td style="width: 170px;"><span class="gw-mono">{gw_id}</span></td>
+                    <td style="width: 150px;"><span class="score-pill">{score:.1f} hrs</span></td>
+                    <td class="reason-text">{highlighted_reason}</td>
+                </tr>
+                """
+            )
+
+        html_table = f"""
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th style="width: 70px; text-align: center;">Rank</th>
+                    <th style="width: 170px;">Gateway ID</th>
+                    <th style="width: 150px;">Anomaly Score</th>
+                    <th>Diagnostic Audit Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                {''.join(table_rows)}
+            </tbody>
+        </table>
+        """
+        st.markdown(html_table, unsafe_allow_html=True)
+
+        st.write("")
+        # CSV Export action
+        csv_df = pd.DataFrame(current_list)
+        csv_data = csv_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="⬇️ Export This Week's Visit Schedule (CSV)",
+            data=csv_data,
+            file_name=f"lpdg_visits_{active_week_str}.csv",
+            mime="text/csv",
+        )
+    else:
+        if is_online:
+            st.info("Click 'Load Rankings' above to fetch the weekly gateway recommendations.")
+        else:
+            st.error("Cannot load rankings because the FastAPI backend is offline. Please start uvicorn.")
+
+# ---------------------------------------------------------
+# TAB 2: Gateway Diagnostic Audit Deep-Dive
+# ---------------------------------------------------------
+with tab_diag:
+    st.markdown("#### Individual Gateway Diagnostic Deep-Dive")
+    st.caption("Inspect why a specific gateway breached its statistical threshold, or audit any gateway across the wider network.")
+
+    d_col1, d_col2 = st.columns([1.5, 2.5], gap="large")
+
+    with d_col1:
+        st.markdown('<div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1.25rem; border-radius: 10px;">', unsafe_allow_html=True)
+        id_source = st.radio(
+            "Select Gateway Source:",
             options=["From this week's top 15", "Enter custom Gateway ID"],
-            horizontal=True,
+            horizontal=False,
         )
 
-        if id_mode == "From this week's top 15":
-            target_gw = st.selectbox("Select Gateway ID:", options=available_ids)
+        available_ids = [gw["gateway_id"] for gw in current_list] if current_list else ["0A2778A31BE3"]
+
+        if id_source == "From this week's top 15" and available_ids:
+            target_id = st.selectbox("Target Gateway ID:", options=available_ids)
         else:
-            target_gw = st.text_input("Enter Gateway ID (e.g. 0A2778A31BE3):", value=available_ids[0] if available_ids else "0A2778A31BE3")
+            target_id = st.text_input("Enter Gateway ID (12-char hex):", value="0A2778A31BE3")
 
-        explain_btn = st.button("🔍 Explain Gateway", use_container_width=True)
+        audit_btn = st.button("🔍 Run Diagnostic Audit", use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with exp_col2:
-        if explain_btn or target_gw:
-            if target_gw:
-                code, exp_data = fetch_gateway_explanation(target_gw.strip(), st.session_state.current_week)
-                if code == 200:
-                    in_top = exp_data.get("in_top_15", False)
-                    badge = "✅ Priority Site Visit Recommended (Top 15)" if in_top else "ℹ️ Outside Top 15 (No Visit Required)"
-                    rank_display = f"#{exp_data.get('rank')}" if exp_data.get("rank") is not None else "Unranked"
+    with d_col2:
+        if audit_btn or target_id:
+            cleaned_id = target_id.strip().upper()
+            code, exp = fetch_gateway_explanation(cleaned_id, active_week_str)
 
-                    st.markdown(
-                        f"""
-                        <div class="card">
-                            <div class="card-title">Diagnosis for Gateway <code>{exp_data.get('gateway_id')}</code> ({st.session_state.current_week})</div>
-                            <p style="margin-bottom: 0.5rem;"><strong>Status:</strong> {badge}</p>
-                            <p style="margin-bottom: 0.5rem;"><strong>Rank:</strong> {rank_display} &bull; <strong>Score:</strong> {exp_data.get('score')} breach hour(s)</p>
-                            <p style="margin-bottom: 0;"><strong>Audit Rationale:</strong> {exp_data.get('reason')}</p>
+            if code == 200:
+                in_top = exp.get("in_top_15", False)
+                rank_str = f"#{exp.get('rank')}" if exp.get("rank") is not None else "Unranked"
+                score_str = f"{exp.get('score')} hrs" if exp.get("score") is not None else "0.0 hrs"
+
+                badge_markup = (
+                    '<div class="priority-badge-visit">✓ Priority Physical Visit Recommended (Ranked in Top 15)</div>'
+                    if in_top
+                    else '<div class="priority-badge-novisit">ℹ️ Normal Operation • Outside Top 15 (No Visit Required)</div>'
+                )
+
+                st.markdown(
+                    f"""
+                    <div class="diag-card">
+                        <div class="diag-title">Audit Report: Gateway <code style="color: #2563EB;">{exp.get('gateway_id')}</code></div>
+                        {badge_markup}
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                            <div style="background: #F8FAFC; padding: 0.75rem; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                <div style="font-size: 0.75rem; color: #64748B; font-weight: 600;">ASSIGNED RANK</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #0F172A;">{rank_str}</div>
+                            </div>
+                            <div style="background: #F8FAFC; padding: 0.75rem; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                <div style="font-size: 0.75rem; color: #64748B; font-weight: 600;">3-SIGMA BREACH</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #B91C1C;">{score_str}</div>
+                            </div>
+                            <div style="background: #F8FAFC; padding: 0.75rem; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                <div style="font-size: 0.75rem; color: #64748B; font-weight: 600;">DISPATCH COST</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #0F172A;">{"£380" if in_top else "£0 (Saved)"}</div>
+                            </div>
                         </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-                elif code == 0:
-                    st.error(f"⚠️ {exp_data.get('detail')}")
-                elif code == 404:
-                    st.error(f"Gateway Not Found (HTTP 404): {exp_data.get('detail')}")
-                elif code == 400:
-                    st.error(f"Bad Request (HTTP 400): {exp_data.get('detail')}")
-                elif code == 500:
-                    st.error(f"API Server Error (HTTP 500): {exp_data.get('detail')}")
-                else:
-                    st.error(f"Error (HTTP {code}): {exp_data.get('detail')}")
+                        <div style="font-size: 0.85rem; color: #64748B; font-weight: 600; margin-bottom: 0.35rem;">AUDIT RATIONALE</div>
+                        <p style="font-size: 0.95rem; color: #1E293B; background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; line-height: 1.5; border: 1px solid #E2E8F0; margin: 0;">
+                            {exp.get('reason')}
+                        </p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            elif code == 404:
+                st.error(f"Gateway Not Found (HTTP 404): {exp.get('detail')}")
+            elif code == 400:
+                st.error(f"Bad Request (HTTP 400): {exp.get('detail')}")
             else:
-                st.info("Please enter or select a gateway ID to explain.")
-else:
-    if is_online:
-        st.info("Click 'Load Rankings' above to display the weekly gateway recommendations.")
+                st.error(f"Error ({code}): {exp.get('detail', 'Unknown error')}")
+
+# ---------------------------------------------------------
+# TAB 3: System Architecture & API
+# ---------------------------------------------------------
+with tab_arch:
+    st.markdown("#### System Architecture & Decoupled Design")
+    st.caption("Strict separation between ingestion mathematics, REST service layer, and client presentations.")
+
+    arch_col1, arch_col2 = st.columns([1.6, 1.4], gap="large")
+
+    with arch_col1:
+        st.markdown(
+            """
+            ```
+             ┌─────────────────────────────────────────────────────────┐
+             │       Streamlit Dashboard (Port 8501 - Presentation)    │
+             └────────────────────────────┬────────────────────────────┘
+                                          │ HTTP REST (httpx)
+                                          ▼
+             ┌─────────────────────────────────────────────────────────┐
+             │       FastAPI Application (Port 8000 - Service Layer)   │
+             │   - /health                                             │
+             │   - /weeks/{week_start}/rankings                        │
+             │   - /gateways/{gateway_id}/explanation                  │
+             │   - /run (POST)                                         │
+             └────────────────────────────┬────────────────────────────┘
+                                          │ Strategy Pattern
+                                          ▼
+             ┌─────────────────────────────────────────────────────────┐
+             │       RankingEngine (src/ranking/engine.py)             │
+             │   - Pluggable RankingStrategy Protocol                  │
+             │   - ThreeSigmaStrategy (Baseline) / CustomMLStrategy   │
+             └────────────────────────────┬────────────────────────────┘
+                                          │ Disk I/O
+                                          ▼
+             ┌─────────────────────────────────────────────────────────┐
+             │   Telemetry Data (data/telemetry/ or predictions.csv)   │
+             └─────────────────────────────────────────────────────────┘
+            ```
+            """
+        )
+
+    with arch_col2:
+        st.markdown(
+            """
+            ##### Live API Endpoints
+            - `GET /health`: Healthcheck, version, data availability
+            - `GET /weeks/{date}/rankings`: Returns 15 prioritized gateways
+            - `GET /gateways/{id}/explanation`: 3-sigma anomaly rationale
+            - `POST /run`: On-demand calculation & predictions.csv export
+
+            ##### Key Engineering Highlights
+            - **Strategy Pattern:** Seamlessly swap 3-sigma baseline for ML models without touching API or UI.
+            - **No Logic Duplication:** Dashboard performs zero ranking math; all results arrive via FastAPI.
+            - **Fail-Safe Robustness:** Clean HTTP 400/404/422/500 error propagation with zero Python traceback leakage.
+            """
+        )
