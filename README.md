@@ -98,6 +98,7 @@ The default ranking strategy strictly implements the official `baseline_3sigma.p
 LPDG-Innovation-Challenge-2026/
 ├── .gitignore                     # Git exclusion rules (data/, .venv/, etc.)
 ├── requirements.txt               # Pinned Python package dependencies
+├── app.py                         # Streamlit interactive web dashboard
 ├── baseline_3sigma.py             # Official 3-sigma anomaly baseline logic
 ├── validate_submission.py         # Official validator checking predictions schema
 ├── predictions.csv                # Validated 120-row submission predictions
@@ -217,7 +218,39 @@ The interactive Swagger documentation is available at:
 
 ---
 
-## 11. API Endpoints & Examples
+
+---
+
+## 11. Running the Streamlit Dashboard
+
+In addition to the FastAPI REST endpoints and Swagger UI, the project includes an interactive web dashboard built with Streamlit:
+
+### How to Run:
+Ensure the FastAPI backend is running first:
+```powershell
+uvicorn src.api.main:app --reload
+```
+In a second terminal, start the Streamlit dashboard:
+```powershell
+streamlit run app.py
+```
+Open your browser to:
+- **Dashboard URL:** [http://localhost:8501](http://localhost:8501)
+
+### System Workflow:
+`User → Streamlit Dashboard → FastAPI → RankingEngine → Telemetry Data`
+
+The dashboard strictly acts as an HTTP client to the FastAPI backend and does **not** duplicate any ranking calculations.
+
+### Dashboard Capabilities:
+- **Real-time API Connection Status:** Continuously pings `GET /health` and provides immediate troubleshooting instructions if the backend service is offline.
+- **Scored Week Selector:** Intuitive dropdown for all eight scored deployment Mondays (2026-02-02 to 2026-03-23).
+- **Summary Metrics Row:** Displays total ranked gateways (15 fixed capacity), selected deployment week, and API connectivity status.
+- **Interactive Rankings Table:** Shows Rank (1–15), Gateway ID, Anomaly Score (flagged breach hours), and Diagnostic Audit Reason.
+- **Gateway Diagnosis & Explanation:** Query any gateway in the top 15 or input a custom Gateway ID to inspect full anomaly audit rationale and visit recommendation status via `GET /gateways/{gateway_id}/explanation`.
+- **On-Demand Recalculation:** Trigger calculation via `POST /run` directly from the dashboard.
+
+## 12. API Endpoints & Examples
 
 ### 1. Health Check
 `GET /health`
@@ -300,7 +333,7 @@ curl -X POST "http://127.0.0.1:8000/run"      -H "Content-Type: application/json
 
 ---
 
-## 12. Error Handling
+## 13. Error Handling
 
 The API maps exceptions to appropriate HTTP status codes:
 - **`400 Bad Request`**: Invalid date formats (e.g. `2026-99-99`) or non-scored weeks (e.g. `2025-08-04`).
@@ -310,7 +343,7 @@ The API maps exceptions to appropriate HTTP status codes:
 
 ---
 
-## 13. Automated Testing
+## 14. Automated Testing
 
 The automated test suite contains 20 comprehensive tests:
 ```bash
@@ -325,7 +358,7 @@ Test categories include:
 
 ---
 
-## 14. How to Replace the Ranking Strategy
+## 15. How to Replace the Ranking Strategy
 
 To introduce a new ranking algorithm (e.g. ML, multi-criteria optimization, cost-weighted ranker):
 1. Implement a class adhering to the `RankingStrategy` protocol in `src/ranking/engine.py`:
@@ -352,7 +385,7 @@ No changes to `src/api/main.py` are required.
 
 ---
 
-## 15. Limitations & What the System Cannot Do
+## 16. Limitations & What the System Cannot Do
 
 1. **Intentionally Simple Anomaly Baseline:** The 3-sigma rule is a statistical anomaly detector, not a predictive machine learning model. It identifies gateways that *have already breached statistical norms*, rather than anticipating failures before symptoms occur.
 2. **Fixed 28-Day Rolling Window:** Does not account for longer-term seasonal patterns (e.g., severe winter storms or seasonal radio propagation shifts).
@@ -364,14 +397,15 @@ No changes to `src/api/main.py` are required.
 
 ---
 
-## 16. Demo Walkthrough Instructions
+## 17. Demo Walkthrough Instructions
 
 For a 6 to 8 minute demonstration video:
 1. **Repository Tour (1 min):** Highlight clean repository structure, `.gitignore` compliance, and verified `predictions.csv`.
 2. **Data & Architecture (1.5 min):** Explain the separation between data ingestion, `RankingEngine`, and the FastAPI service.
-3. **Swagger API Walkthrough (2.5 min):**
-   - Execute `GET /health`.
-   - Execute `GET /weeks/2026-02-02/rankings` and display top 15 ranked gateways.
-   - Execute `GET /gateways/{id}/explanation` for a top 15 gateway and for a gateway outside the top 15 (highlighting the bug fix).
-   - Execute `POST /run` to demonstrate on-demand recalculation.
+3. **FastAPI & Streamlit Walkthrough (3 min):**
+   - Open Swagger UI (`http://127.0.0.1:8000/docs`) and verify `GET /health`.
+   - Launch Streamlit dashboard (`streamlit run app.py` at `http://localhost:8501`).
+   - Select a scored week (e.g. `2026-02-02`) and click **Load Rankings** to inspect the 15 gateways.
+   - Run **Explain Gateway** for a top-ranked gateway and for a gateway outside the top 15.
+   - Highlight the architecture flow: `User → Streamlit Dashboard → FastAPI → RankingEngine → Telemetry Data`.
 4. **Test Suite & Validator (1.5 min):** Run `pytest -q` showing all 20 tests passing and run `python validate_submission.py predictions.csv`.
