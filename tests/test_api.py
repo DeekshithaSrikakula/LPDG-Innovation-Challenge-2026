@@ -60,7 +60,7 @@ def test_explain_gateway_success(client):
 
 def test_explain_gateway_missing_param(client):
     response = client.get("/gateways/0A0000000001/explanation")
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == 422
 
 
 def test_explain_nonexistent_gateway(client):
@@ -82,7 +82,7 @@ def test_post_run_single_week(client):
 
 def test_post_run_malformed_body(client):
     response = client.post("/run", content="not-json", headers={"Content-Type": "application/json"})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == 422
 
 
 def test_missing_data_directory_returns_500_without_traceback(monkeypatch):
