@@ -23,8 +23,8 @@ This solution wraps the official anomaly ranking logic in a clean, robust, and e
 ## 2. Problem Statement
 
 Operations teams cannot afford unguided manual triage or gut-feel scheduling:
-- An unnecessary site visit costs **£380**.
-- An unvisited failed gateway leaves hundreds of customer meters unread, leading to billing errors, manual readouts, and customer churn.
+- An unnecessary site visit costs **€380**.
+- An unvisited failed gateway leaves hundreds of customer meters unread, leading to billing errors, estimated billing, and manual readout costs.
 - Gateways operate under varying conditions; seasonal variances, cellular network re-registrations, and power fluctuations must be distinguished from true hardware degradation.
 
 The challenge mandates:
@@ -32,6 +32,9 @@ The challenge mandates:
 2. Providing a decoupled, maintainable Web API that another developer can pick up and extend.
 3. Enabling seamless swapping of ranking strategies without rewriting API routes.
 4. Handling edge cases, invalid user inputs, missing data, and unregistered gateways gracefully.
+
+> **Evaluation Scope vs. API Implementation Choice:**
+> Producing predictions strictly for the 8 official scored weeks (120 rows) is mandatory for `predictions.csv` to satisfy the challenge evaluation validator. In contrast, limiting the API to those 8 weeks was an initial implementation choice to match challenge boundaries; the underlying ranking engine is mathematically date-agnostic, and the API has been designed to accept any valid Monday (computing dynamic rankings when telemetry is present, or serving baseline rankings in offline mode).
 
 ---
 
@@ -395,7 +398,7 @@ No changes to `src/api/main.py` are required.
 4. **What Two Additional Weeks Would Provide:**
    - Incorporating meter reading success rates from `meter_read_success.csv` to weight anomalies by actual customer impact.
    - Correlating engineer visit outcomes from `field_visits.csv` to label true positive failures versus transient network flukes.
-   - Deploying an supervised classification model (e.g. LightGBM / XGBoost) trained to minimize total dispatch cost (£380 per visit).
+   - Deploying a supervised classification model (e.g. LightGBM / XGBoost) trained to minimize total dispatch cost (€380 per visit).
 
 ---
 
