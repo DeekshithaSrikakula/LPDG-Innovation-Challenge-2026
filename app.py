@@ -231,6 +231,8 @@ SCORED_WEEKS = [
     "2026-03-23",
 ]
 
+AVAILABLE_WEEKS = SCORED_WEEKS + ["2026-04-06 (Test Week)", "Custom Date..."]
+
 DEFAULT_WEEK = "2026-02-23"
 
 
@@ -342,17 +344,34 @@ if not is_online:
 # ---------------------------------------------------------
 # Control Bar
 # ---------------------------------------------------------
-default_idx = SCORED_WEEKS.index(st.session_state.selected_week) if st.session_state.selected_week in SCORED_WEEKS else 3
+if st.session_state.selected_week in SCORED_WEEKS:
+    default_idx = SCORED_WEEKS.index(st.session_state.selected_week)
+elif st.session_state.selected_week == "2026-04-06":
+    default_idx = len(SCORED_WEEKS)
+else:
+    default_idx = 3
 
 ctrl_col1, ctrl_col2, ctrl_col3, ctrl_col4 = st.columns([2.2, 1.4, 1.4, 3.0], vertical_alignment="bottom")
 
 with ctrl_col1:
-    selected_week = st.selectbox(
+    week_choice = st.selectbox(
         "Week",
-        options=SCORED_WEEKS,
+        options=AVAILABLE_WEEKS,
         index=default_idx,
-        help="Select one of the 8 scored Mondays from 2026-02-02 to 2026-03-23.",
+        help="Select one of the 8 scored Mondays, a test evaluation week, or enter a custom date.",
     )
+    if week_choice == "2026-04-06 (Test Week)":
+        selected_week = "2026-04-06"
+    elif week_choice == "Custom Date...":
+        custom_input = st.text_input(
+            "Enter Monday (YYYY-MM-DD):",
+            value="2026-04-06",
+            key="custom_week_field",
+        )
+        selected_week = custom_input.strip()
+    else:
+        selected_week = week_choice
+
     st.session_state.selected_week = selected_week
 
 with ctrl_col2:
