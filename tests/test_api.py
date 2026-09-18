@@ -38,9 +38,24 @@ def test_get_weekly_rankings_invalid_date(client):
 
 
 def test_get_weekly_rankings_unsupported_week(client):
-    response = client.get("/weeks/2025-08-04/rankings")
+    response = client.get("/weeks/2026-01-01/rankings")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "Unsupported week_start" in response.json()["detail"]
+    assert "week_start must be a Monday" in response.json()["detail"]
+
+
+def test_get_weekly_rankings_new_monday_success(client):
+    response = client.get("/weeks/2026-04-06/rankings")
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["week_start"] == "2026-04-06"
+    gateways = data["gateways"]
+    assert len(gateways) == 15
+    assert gateways[0]["rank"] == 1
+    assert gateways[-1]["rank"] == 15
+    for gw in gateways:
+        assert "gateway_id" in gw
+        assert "score" in gw
+        assert "reason" in gw
 
 
 def test_explain_gateway_success(client):

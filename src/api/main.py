@@ -79,12 +79,12 @@ class GatewayRanking(BaseModel):
 
 
 class WeekRankings(BaseModel):
-    week_start: str = Field(..., description="Scored Monday in YYYY-MM-DD format", json_schema_extra={"example": "2026-02-02"})
+    week_start: str = Field(..., description="Evaluation Monday in YYYY-MM-DD format", json_schema_extra={"example": "2026-04-06"})
     gateways: list[GatewayRanking] = Field(..., description="Ordered list of top 15 gateways requiring site visits")
 
 
 class GatewayExplanation(BaseModel):
-    week_start: str = Field(..., description="Scored Monday in YYYY-MM-DD format", json_schema_extra={"example": "2026-02-02"})
+    week_start: str = Field(..., description="Evaluation Monday in YYYY-MM-DD format", json_schema_extra={"example": "2026-04-06"})
     gateway_id: str = Field(..., description="Gateway identifier", json_schema_extra={"example": "0A2778A31BE3"})
     rank: int | None = Field(None, description="Ranking position (1-15 if in top 15, >15 if lower, or None if inactive)", json_schema_extra={"example": 1})
     score: float = Field(..., description="Flagged breach hours beyond 3 sigma", json_schema_extra={"example": 43.0})
@@ -95,15 +95,15 @@ class GatewayExplanation(BaseModel):
 class RunRequest(BaseModel):
     week_start: str | None = Field(
         None,
-        description="Optional single scored Monday (YYYY-MM-DD). If omitted, all 8 scored weeks are processed.",
-        json_schema_extra={"example": "2026-02-02"},
+        description="Optional single Monday (YYYY-MM-DD). If omitted, all 8 scored weeks are processed.",
+        json_schema_extra={"example": "2026-04-06"},
     )
 
 
 class RunResponse(BaseModel):
     status: str = Field(..., json_schema_extra={"example": "completed"})
     message: str = Field(..., json_schema_extra={"example": "Ranking completed for all scored weeks."})
-    week_start: str | None = Field(None, json_schema_extra={"example": "2026-02-02"})
+    week_start: str | None = Field(None, json_schema_extra={"example": "2026-04-06"})
     weeks: int | None = Field(None, json_schema_extra={"example": 8})
     rows: int | None = Field(None, json_schema_extra={"example": 120})
     gateways: list[dict[str, Any]] | None = None
@@ -139,7 +139,8 @@ def health():
     response_model=WeekRankings,
     summary="Get 15 ranked gateways for a week",
     description=(
-        "Returns the top 15 gateways prioritized for physical field team visits for the specified scored Monday. "
+        "Returns the top 15 gateways prioritized for physical field team visits for any specified Monday. "
+        "Supports official challenge weeks as well as new evaluation dates. "
         "Each gateway entry contains its 1-15 rank, ID, breach score, and audit reason."
     ),
     tags=["Rankings"],
@@ -181,7 +182,7 @@ def get_week_rankings(week_start: str):
 )
 def explain_gateway(
     gateway_id: str,
-    week_start: str = Query(..., description="The scored Monday to evaluate (YYYY-MM-DD)", examples=["2026-02-02"]),
+    week_start: str = Query(..., description="The Monday to evaluate (YYYY-MM-DD)", examples=["2026-04-06"]),
 ):
     active_engine = get_engine()
     return active_engine.explain_gateway(

@@ -13,7 +13,7 @@ def test_invalid_date_format_raises_error(test_engine):
 
 
 def test_unsupported_week_raises_error(test_engine):
-    with pytest.raises(ValueError, match="Unsupported week_start '2026-01-01'"):
+    with pytest.raises(ValueError, match="week_start must be a Monday"):
         test_engine.get_week_rankings("2026-01-01")
 
 
